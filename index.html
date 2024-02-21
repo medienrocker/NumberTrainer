@@ -4,8 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Zahlen Trainer</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    
+    <div id="content">
+        <button id="generateNumber" type="button">Sag eine Zahl</button>
+        <button id="repeatNumber" type="button">Nochmal abspielen</button>
+        <button id="revealSolution" type="button" class="nt_hidden">Lösung zeigen</button>
+        <div id="numbersArea"></div>
+    </div>
+    <!-- Audio elements for numbers and success sound -->
+    <!-- These will be dynamically created in JavaScript -->
+    <script src="script.js"></script>
 </body>
 </html>

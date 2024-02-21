@@ -1,0 +1,39 @@
+.nt_hidden {
+    display: none;
+}
+
+#content {
+    text-align: center;
+    margin-top: 50px;
+}
+
+button {
+    margin: 10px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+#numbersArea {
+    margin-top: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.number {
+    margin: 5px;
+    padding: 10px;
+    border: 1px solid black;
+    cursor: pointer;
+    user-select: none;
+}
+
+.correct {
+    background-color: green;
+    color: white;
+}
+
+.incorrect {
+    background-color: lightcoral;
+}
