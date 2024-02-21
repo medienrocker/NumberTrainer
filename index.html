@@ -1,20 +1,40 @@
 <!DOCTYPE html>
 <html lang="de">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Zahlen Trainer</title>
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-    <div id="content">
-        <button id="generateNumber" type="button">Sag eine Zahl</button>
-        <button id="repeatNumber" type="button">Nochmal abspielen</button>
-        <button id="revealSolution" type="button" class="nt_hidden">Lösung zeigen</button>
-        <div id="numbersArea"></div>
+    <div id="nt_wrapper">
+        <div class="nt_range-container">
+            <div class="nt_range-buttons">
+                <!-- Range selection buttons -->
+                <button id="range06" type="button" class="nt_button">0 - 6</button>
+                <button id="range012" type="button" class="nt_button">0 - 12</button>
+                <button id="range020" type="button" class="nt_button">0 - 20</button>
+            </div>
+            <!-- Slider range display -->
+            <p>Wähle aus: 0 - <span id="sliderValue">6</span></p>
+
+            <!-- Range slider -->
+            <input type="range" id="rangeSlider" min="0" max="20" value="6">
+        </div>
+        <div class="nt_game-container">
+            <div id="nt_content">
+                <button id="nt_generateNumber" type="button" class="nt_button">Sag eine Zahl</button>
+                <button id="nt_repeatNumber" type="button" class="nt_button">Nochmal abspielen</button>
+                <button id="nt_revealSolution" type="button" class="nt_button nt_hidden">Lösung zeigen</button>
+                <div id="nt_numbersArea"></div>
+            </div>
+            <!-- Audio elements for numbers and success / wrong sound -->
+            <!-- These will be dynamically created in JavaScript -->
+        </div>
     </div>
-    <!-- Audio elements for numbers and success sound -->
-    <!-- These will be dynamically created in JavaScript -->
     <script src="script.js"></script>
 </body>
+
 </html>
