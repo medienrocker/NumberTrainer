@@ -1,10 +1,16 @@
+.nt_hidden {
+    display: none;
+}
+
 #nt_wrapper {
     font-family: 'Roboto', sans-serif;
     font-size: 1.3em;
-    padding: 20px;
     text-align: center;
+    padding: 20px;
+    margin: 20px;
     border: 1px solid #333;
     border-radius: 10px;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
 
 .nt_button {
@@ -19,10 +25,17 @@
     transition: all .4s ease;
 }
 
+.nt_button:hover {
+    transform: scale(1.1);
+    box-shadow: rgba(0, 0, 0, 0.4) 0px 3px 8px;
+}
+
 #nt_generateNumber,
 #nt_repeatNumber,
 #nt_revealSolution {
     color: white;
+    font-size: 1.3em;
+    margin: 10px;
 }
 
 #nt_generateNumber {
@@ -40,13 +53,20 @@
 .nt_number {
     width: 60px;
     height: 60px;
-    line-height: 60px;
+    line-height: 60%;
     /* Center text vertically */
+    text-align: center;
     margin: 10px;
     border: 2px solid #ddd;
     border-radius: 50%;
     display: inline-block;
     font-size: 24px;
+    transition: all .2s ease;
+}
+
+.nt_number:hover {
+    transform: scale(1.5);
+    box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
 }
 
 .nt_range-container,
@@ -57,18 +77,33 @@
     justify-content: center;
 }
 
-.nt_hidden {
-    display: none;
+#nt_slider-container {
+    background-color: #eee;
+    width: 200px;
+    padding-bottom: 10px;
+    margin-top: 20px;
+    border-radius: 10px;
+}
+
+#nt_slider-container p {
+    margin-bottom: 2px;
+}
+
+#nt_numbersArea {
+    margin-top: 20px;;
 }
 
 #nt_content {
     text-align: center;
-    margin-top: 50px;
+    margin-top: 20px;
+    margin-bottom: 20px;
 }
 
 .nt_correct {
     background-color: green;
     color: white;
+    box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
+    transform: scale(1.3);
 }
 
 .nt_incorrect {
