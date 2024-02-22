@@ -5,7 +5,7 @@ If the student clicks the right number, its background color changes to green an
 If the wrong number is clicked the background turns into light red and a motivating audioclip says something like "try again".
 
 Scope:
-1. realisation as local Website
+1. realisation as local Website ✔️ DONE!
 2. as a moodle database activity
 3. as an android (iOS) app
 4. as H5P activity
