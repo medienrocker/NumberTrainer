@@ -1,48 +1,116 @@
 document.addEventListener('DOMContentLoaded', function () {
-    const generateButton = document.getElementById('generateNumber');
-    const repeatButton = document.getElementById('repeatNumber');
-    const revealButton = document.getElementById('revealSolution');
-    const numbersArea = document.getElementById('numbersArea');
+    const generateButton = document.getElementById('nt_generateNumber');
+    const repeatButton = document.getElementById('nt_repeatNumber');
+    const revealButton = document.getElementById('nt_revealSolution');
+    const numbersArea = document.getElementById('nt_numbersArea');
+    const useSliderCheckbox = document.getElementById('nt_useSlider');
+    const rangeSlider = document.getElementById('nt_rangeSlider');
     let currentNumber = 0;
     let audioElements = {};
     let wrongAnswerAudio = ['wrong1.mp3', 'wrong2.mp3', 'wrong3.mp3']; // Array of wrong answer audio clips
-    let correctAnswerAudio = ['correct1.mp3', 'correct2.mp3', 'correct3.mp3']; // Array of correct answer audio clips
+    let correctAnswerAudio = ['correct1.mp3', 'correct2.mp3', 'correct3.mp3', 'correct4.mp3']; // Array of correct answer audio clips
+    let currentRange = [0, 6]; // Default range to 0-6
+
+    // Initialize slider and displayed range
+    document.getElementById('nt_rangeSlider').value = currentRange[1];
+    document.getElementById('nt_sliderValue').innerText = currentRange[1];
+
+    // Set initial active state for range button
+    document.getElementById('nt_range06').classList.add('nt_active');
 
     // Function to initialize audio elements
     function initializeAudio() {
-        for (let i = 0; i <= 10; i++) {
-            let audio = new Audio('audio/number' + (i < 10 ? '0' + i : i) + '.mp3');
+        for (let i = 0; i <= 20; i++) {
+            let audio = new Audio('https://www.medienrocker.com/games/numbertrainer/audio/number' + (i < 10 ? '0' + i : i) + '.mp3');
             audioElements[i] = audio;
         }
         correctAnswerAudio.forEach((file, index) => {
-            audioElements['correct' + index] = new Audio('audio/' + file);
+            audioElements['correct' + index] = new Audio('https://www.medienrocker.com/games/numbertrainer/audio/' + file);
         });
         wrongAnswerAudio.forEach((file, index) => {
-            audioElements['wrong' + index] = new Audio('audio/' + file);
+            audioElements['wrong' + index] = new Audio('https://www.medienrocker.com/games/numbertrainer/audio/' + file);
         });
     }
 
-    // Function to play a random number sound
-    function playRandomNumber() {
-        currentNumber = Math.floor(Math.random() * 11);
-        audioElements[currentNumber].play();
-        generateNumbers();
-        document.getElementById('revealSolution').classList.remove('nt_hidden');
+    rangeSlider.addEventListener('input', function (e) {
+        document.getElementById('nt_sliderValue').innerText = e.target.value;
+        setRangeFromSlider();
+    });
+
+    useSliderCheckbox.addEventListener('change', function () {
+        const sliderControls = document.getElementById('nt_sliderControls');
+        sliderControls.style.display = useSliderCheckbox.checked ? 'block' : 'none';
+        setRangeFromSlider();
+        toggleRangeButtonsDisabled(useSliderCheckbox.checked);
+    });
+
+    function toggleRangeButtonsDisabled(isDisabled) {
+        ['nt_range06', 'nt_range712', 'nt_range1320'].forEach(id => {
+            document.getElementById(id).disabled = isDisabled;
+        });
     }
 
+    // Initialize the state on page load
+    toggleRangeButtonsDisabled(useSliderCheckbox.checked);
+
+
+    function setRange(range) {
+        currentRange = range;
+        document.getElementById('nt_sliderValue').innerText = range[1]; // Update slider value display
+        document.getElementById('nt_rangeSlider').value = range[1]; // Update slider to match the range
+
+        // Update active button state
+        ['nt_range06', 'nt_range712', 'nt_range1320'].forEach(id => {
+            document.getElementById(id).classList.remove('nt_active');
+        });
+        if (range[1] >= 0 && range[1] <= 6) {
+            document.getElementById('nt_range06').classList.add('nt_active');
+        } else if (range[1] >= 7 && range[1] <= 12) {
+            document.getElementById('nt_range712').classList.add('nt_active');
+        } else if (range[1] >= 13 && range[1] <= 20) {
+            document.getElementById('nt_range1320').classList.add('nt_active');
+        }
+
+        // Disable range buttons if using slider
+        const buttonsDisabled = useSliderCheckbox.checked;
+        document.getElementById('nt_range06').disabled = buttonsDisabled;
+        document.getElementById('nt_range712').disabled = buttonsDisabled;
+        document.getElementById('nt_range1320').disabled = buttonsDisabled;
+    }
+
+
+    function setRangeFromSlider() {
+        if (useSliderCheckbox.checked) {
+            setRange([0, parseInt(rangeSlider.value)]);
+        }
+    }
+
+    // Event listeners for range buttons
+    document.getElementById('nt_range06').addEventListener('click', () => setRange([0, 6]));
+    document.getElementById('nt_range712').addEventListener('click', () => setRange([7, 12]));
+    document.getElementById('nt_range1320').addEventListener('click', () => setRange([13, 20]));
+
+
+    function playRandomNumber() {
+        let min = currentRange[0];
+        let max = currentRange[1];
+        currentNumber = Math.floor(Math.random() * (max - min + 1)) + min;
+        audioElements[currentNumber]?.play();
+        generateNumbers();
+        document.getElementById('nt_revealSolution').classList.remove('nt_hidden');
+    }
 
     // Function to generate number buttons
     function generateNumbers() {
         numbersArea.innerHTML = '';
-        let numbers = shuffleArray([...Array(11).keys()]);
-        numbers.forEach(num => {
+        for (let i = currentRange[0]; i <= currentRange[1]; i++) {
             let numberButton = document.createElement('button');
-            numberButton.textContent = num.toString();
-            numberButton.className = 'number';
+            numberButton.textContent = i.toString();
+            numberButton.className = 'nt_number';
             numberButton.type = 'button';
-            numberButton.onclick = function () { checkNumber(num); };
+            numberButton.onclick = function () { checkNumber(i); };
             numbersArea.appendChild(numberButton);
-        });
+        }
     }
 
     // Function to shuffle array (Fisher-Yates Shuffle)
@@ -58,10 +126,10 @@ document.addEventListener('DOMContentLoaded', function () {
     function checkNumber(num) {
         let selectedButton = event.target;
         if (num === currentNumber) {
-            selectedButton.className = 'number correct';
+            selectedButton.className = 'nt_number nt_correct';
             playRandomCorrectAudio();
         } else {
-            selectedButton.className = 'number incorrect';
+            selectedButton.className = 'nt_number nt_incorrect';
             playRandomWrongAudio();
         }
     }
@@ -80,10 +148,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Function to reveal the solution
     function revealSolution() {
-        let allButtons = numbersArea.getElementsByClassName('number');
+        let allButtons = numbersArea.getElementsByClassName('nt_number');
         Array.from(allButtons).forEach(button => {
             if (parseInt(button.textContent) === currentNumber) {
-                button.className = 'number correct';
+                button.className = 'nt_number nt_correct';
             }
         });
     }

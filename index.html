@@ -1,20 +1,52 @@
 <!DOCTYPE html>
 <html lang="de">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Zahlen Trainer</title>
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-    <div id="content">
-        <button id="generateNumber" type="button">Sag eine Zahl</button>
-        <button id="repeatNumber" type="button">Nochmal abspielen</button>
-        <button id="revealSolution" type="button" class="nt_hidden">Lösung zeigen</button>
-        <div id="numbersArea"></div>
+    <div id="nt_wrapper">
+        <div id="nt_header">
+            <img src="https://www.medienrocker.com/games/numbertrainer/img/NumberTrainerBanner_edit3.png" alt="">
+            <h2><span>Zahlen Training</span></h2>
+        </div>
+        <div class="nt_range-container">
+            <div class="nt_range-buttons">
+                <!-- Range selection buttons -->
+                <button id="nt_range06" type="button" class="nt_button">0 - 6</button>
+                <button id="nt_range712" type="button" class="nt_button">7 - 12</button>
+                <button id="nt_range1320" type="button" class="nt_button">13 - 20</button>
+
+            </div>
+
+            <div id="nt_slider-container">
+                <label for="nt_useSlider">
+                    <input type="checkbox" id="nt_useSlider"> Zahlen wählen
+                </label>
+                <div id="nt_sliderControls" style="display: none;">
+                    <input type="range" id="nt_rangeSlider" min="0" max="20" value="6">
+                    <p><strong>0 - <span id="nt_sliderValue">6</span></strong></p>
+                </div>
+            </div>
+
+
+        </div>
+        <div class="nt_game-container">
+            <div id="nt_content">
+                <button id="nt_generateNumber" type="button" class="nt_button">Sag eine Zahl</button>
+                <button id="nt_repeatNumber" type="button" class="nt_button">Nochmal hören</button>
+                <button id="nt_revealSolution" type="button" class="nt_button nt_hidden">Lösung zeigen</button>
+                <div id="nt_numbersArea"></div>
+            </div>
+            <!-- Audio elements for numbers and success / wrong sound -->
+            <!-- These will be dynamically created in JavaScript -->
+        </div>
     </div>
-    <!-- Audio elements for numbers and success sound -->
-    <!-- These will be dynamically created in JavaScript -->
     <script src="script.js"></script>
 </body>
+
 </html>
