@@ -45,6 +45,24 @@
             <!-- Audio elements for numbers and success / wrong sound -->
             <!-- These will be dynamically created in JavaScript -->
         </div>
+
+        <div id="nt_accuracyDisplay" >
+            <p>Alle Clicks: <span id="nt_totalClicks">0</span></p>
+            <p>Richtige Clicks: <span id="nt_correctClicks">0</span></p>
+            <p>Genauigkeit: <span id="nt_accuracy">0%</span></p>
+            <!-- Hidden input fields for potential database storage -->
+            <input type="hidden" id="nt_totalClicksInput">
+            <input type="hidden" id="nt_correctClicksInput">
+            <input type="hidden" id="nt_accuracyInput">
+        </div>
+
+        <div id="nt_bestResultDisplay" style="margin-top: 20px;">
+            <h3>Bestes Ergebnis</h3>
+            <p><span id="nt_bestCorrectClicks">0</span> / <span id="nt_bestTotalClicks">0</span> = <span id="nt_bestAccuracy">0%</span></p>
+        </div>
+
+
+
     </div>
     <script src="script.js"></script>
 </body>

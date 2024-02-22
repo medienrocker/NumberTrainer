@@ -10,6 +10,11 @@ document.addEventListener('DOMContentLoaded', function () {
     let wrongAnswerAudio = ['wrong1.mp3', 'wrong2.mp3', 'wrong3.mp3']; // Array of wrong answer audio clips
     let correctAnswerAudio = ['correct1.mp3', 'correct2.mp3', 'correct3.mp3', 'correct4.mp3']; // Array of correct answer audio clips
     let currentRange = [0, 6]; // Default range to 0-6
+    let totalClicks = 0;
+    let correctClicks = 0;
+    let bestAccuracy = 0;
+    let bestTotalClicks = 0;
+    let bestCorrectClicks = 0;
 
     // Initialize slider and displayed range
     document.getElementById('nt_rangeSlider').value = currentRange[1];
@@ -92,6 +97,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
     function playRandomNumber() {
+        totalClicks = 0; // Reset counters when a new number is generated
+        correctClicks = 0;
+        showClickRatio();
+
         let min = currentRange[0];
         let max = currentRange[1];
         currentNumber = Math.floor(Math.random() * (max - min + 1)) + min;
@@ -124,15 +133,48 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Function to check if the selected number is correct
     function checkNumber(num) {
+        totalClicks++; // Increment total clicks for every number button click
+
         let selectedButton = event.target;
         if (num === currentNumber) {
+            correctClicks++; // Increment correct clicks if the correct number is clicked
             selectedButton.className = 'nt_number nt_correct';
             playRandomCorrectAudio();
+            showClickRatio(); // Call function to show the click ratio
         } else {
             selectedButton.className = 'nt_number nt_incorrect';
             playRandomWrongAudio();
+            showClickRatio();
         }
     }
+
+    function showClickRatio() {
+        let ratio = correctClicks / totalClicks;
+        let accuracyPercentage = ratio > 0 ? (ratio * 100).toFixed(2) : 0;
+
+        // Update the HTML elements with the accuracy data
+        document.getElementById('nt_totalClicks').textContent = totalClicks;
+        document.getElementById('nt_correctClicks').textContent = correctClicks;
+        document.getElementById('nt_accuracy').textContent = accuracyPercentage + '%';
+
+        // Update the hidden input fields for potential database storage
+        document.getElementById('nt_totalClicksInput').value = totalClicks;
+        document.getElementById('nt_correctClicksInput').value = correctClicks;
+        document.getElementById('nt_accuracyInput').value = accuracyPercentage;
+
+        // Check if current accuracy is better than the best accuracy
+        if (ratio > bestAccuracy) {
+            bestAccuracy = ratio;
+            bestTotalClicks = totalClicks;
+            bestCorrectClicks = correctClicks;
+
+            // Update the best result display
+            document.getElementById('nt_bestAccuracy').textContent = accuracyPercentage + '%';
+            document.getElementById('nt_bestTotalClicks').textContent = bestTotalClicks;
+            document.getElementById('nt_bestCorrectClicks').textContent = bestCorrectClicks;
+        }
+    }
+
 
     // Function to play a random audio clip for a wrong answer
     function playRandomWrongAudio() {
