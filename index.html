@@ -13,17 +13,20 @@
         <div class="nt_range-container">
             <div class="nt_range-buttons">
                 <!-- Range selection buttons -->
-                <button id="range06" type="button" class="nt_button">0 - 6</button>
-                <button id="range012" type="button" class="nt_button">0 - 12</button>
-                <button id="range020" type="button" class="nt_button">0 - 20</button>
+                <button id="nt_range06" type="button" class="nt_button">0 - 6</button>
+                <button id="nt_range712" type="button" class="nt_button">7 - 12</button>
+                <button id="nt_range1320" type="button" class="nt_button">13 - 20</button>
+
             </div>
 
             <div id="nt_slider-container">
-            <!-- Slider range display -->
-            <p>Wähle aus: <strong>0 - <span id="sliderValue">6</span></strong></p>
+                <label for="nt_useSlider">
+                    <input type="checkbox" id="nt_useSlider"> Slider nutzen
+                </label>
+                <input type="range" id="nt_rangeSlider" min="0" max="20" value="6">
+                <p><strong>0 - <span id="nt_sliderValue">6</span></strong></p>
+                
 
-            <!-- Range slider -->
-            <input type="range" id="rangeSlider" min="0" max="20" value="6">
             </div>
         </div>
         <div class="nt_game-container">

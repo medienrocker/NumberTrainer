@@ -3,18 +3,20 @@ document.addEventListener('DOMContentLoaded', function () {
     const repeatButton = document.getElementById('nt_repeatNumber');
     const revealButton = document.getElementById('nt_revealSolution');
     const numbersArea = document.getElementById('nt_numbersArea');
+    const useSliderCheckbox = document.getElementById('nt_useSlider');
+    const rangeSlider = document.getElementById('nt_rangeSlider');
     let currentNumber = 0;
     let audioElements = {};
     let wrongAnswerAudio = ['wrong1.mp3', 'wrong2.mp3', 'wrong3.mp3']; // Array of wrong answer audio clips
     let correctAnswerAudio = ['correct1.mp3', 'correct2.mp3', 'correct3.mp3', 'correct4.mp3']; // Array of correct answer audio clips
-    let maxRange = 6; // Default range
+    let currentRange = [0, 6]; // Default range to 0-6
 
     // Initialize slider and displayed range
-    document.getElementById('rangeSlider').value = maxRange;
-    document.getElementById('sliderValue').innerText = maxRange;
+    document.getElementById('nt_rangeSlider').value = currentRange[1];
+    document.getElementById('nt_sliderValue').innerText = currentRange[1];
 
     // Set initial active state for range button
-    document.getElementById('range06').classList.add('nt_active');
+    document.getElementById('nt_range06').classList.add('nt_active');
 
     // Function to initialize audio elements
     function initializeAudio() {
@@ -30,56 +32,69 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    function setMaxRange(range) {
-        maxRange = range;
-        document.getElementById('sliderValue').innerText = range; // Update slider value display
-        document.getElementById('rangeSlider').value = range; // Update slider to match the range
+    useSliderCheckbox.addEventListener('change', setRangeFromSlider);
+    rangeSlider.addEventListener('input', function (e) {
+        document.getElementById('nt_sliderValue').innerText = e.target.value;
+        setRangeFromSlider();
+    });
+
+    function setRange(range) {
+        currentRange = range;
+        document.getElementById('nt_sliderValue').innerText = range[1]; // Update slider value display
+        document.getElementById('nt_rangeSlider').value = range[1]; // Update slider to match the range
 
         // Update active button state
-        ['range06', 'range012', 'range020'].forEach(id => {
+        ['nt_range06', 'nt_range712', 'nt_range1320'].forEach(id => {
             document.getElementById(id).classList.remove('nt_active');
         });
-        if (range <= 6) {
-            document.getElementById('range06').classList.add('nt_active');
-        } else if (range > 6 && range <= 12) {
-            document.getElementById('range012').classList.add('nt_active');
-        } else if (range > 12 && range <= 20) {
-            document.getElementById('range020').classList.add('nt_active');
+        if (range[1] === 6) {
+            document.getElementById('nt_range06').classList.add('nt_active');
+        } else if (range[1] === 12) {
+            document.getElementById('nt_range712').classList.add('nt_active');
+        } else if (range[1] === 20) {
+            document.getElementById('nt_range1320').classList.add('nt_active');
+        }
+
+        // Disable range buttons if using slider
+        const buttonsDisabled = useSliderCheckbox.checked;
+        document.getElementById('nt_range06').disabled = buttonsDisabled;
+        document.getElementById('nt_range712').disabled = buttonsDisabled;
+        document.getElementById('nt_range1320').disabled = buttonsDisabled;
+    }
+
+
+    function setRangeFromSlider() {
+        if (useSliderCheckbox.checked) {
+            setRange([0, parseInt(rangeSlider.value)]);
         }
     }
 
     // Event listeners for range buttons
-    document.getElementById('range06').addEventListener('click', () => setMaxRange(6));
-    document.getElementById('range012').addEventListener('click', () => setMaxRange(12));
-    document.getElementById('range020').addEventListener('click', () => setMaxRange(20));
-
-    // Event listener for slider
-    document.getElementById('rangeSlider').addEventListener('input', (e) => {
-        setMaxRange(parseInt(e.target.value));
-        document.getElementById('sliderValue').innerText = e.target.value; // Update slider value display
-    });
+    document.getElementById('nt_range06').addEventListener('click', () => setRange([0, 6]));
+    document.getElementById('nt_range712').addEventListener('click', () => setRange([7, 12]));
+    document.getElementById('nt_range1320').addEventListener('click', () => setRange([13, 20]));
 
 
     function playRandomNumber() {
-        currentNumber = Math.floor(Math.random() * (maxRange + 1));
+        let min = currentRange[0];
+        let max = currentRange[1];
+        currentNumber = Math.floor(Math.random() * (max - min + 1)) + min;
         audioElements[currentNumber]?.play();
         generateNumbers();
         document.getElementById('nt_revealSolution').classList.remove('nt_hidden');
     }
 
-
     // Function to generate number buttons
     function generateNumbers() {
         numbersArea.innerHTML = '';
-        let numbers = shuffleArray([...Array(maxRange + 1).keys()]);
-        numbers.forEach(num => {
+        for (let i = currentRange[0]; i <= currentRange[1]; i++) {
             let numberButton = document.createElement('button');
-            numberButton.textContent = num.toString();
+            numberButton.textContent = i.toString();
             numberButton.className = 'nt_number';
             numberButton.type = 'button';
-            numberButton.onclick = function () { checkNumber(num); };
+            numberButton.onclick = function () { checkNumber(i); };
             numbersArea.appendChild(numberButton);
-        });
+        }
     }
 
     // Function to shuffle array (Fisher-Yates Shuffle)
