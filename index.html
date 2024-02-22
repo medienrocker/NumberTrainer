@@ -10,6 +10,10 @@
 
 <body>
     <div id="nt_wrapper">
+        <div id="nt_header">
+            <img src="https://www.medienrocker.com/games/numbertrainer/img/NumberTrainerBanner_edit3.png" alt="">
+            <h2><span>Zahlen Training</span></h2>
+        </div>
         <div class="nt_range-container">
             <div class="nt_range-buttons">
                 <!-- Range selection buttons -->
@@ -21,18 +25,20 @@
 
             <div id="nt_slider-container">
                 <label for="nt_useSlider">
-                    <input type="checkbox" id="nt_useSlider"> Slider nutzen
+                    <input type="checkbox" id="nt_useSlider"> Zahlen wählen
                 </label>
-                <input type="range" id="nt_rangeSlider" min="0" max="20" value="6">
-                <p><strong>0 - <span id="nt_sliderValue">6</span></strong></p>
-                
-
+                <div id="nt_sliderControls" style="display: none;">
+                    <input type="range" id="nt_rangeSlider" min="0" max="20" value="6">
+                    <p><strong>0 - <span id="nt_sliderValue">6</span></strong></p>
+                </div>
             </div>
+
+
         </div>
         <div class="nt_game-container">
             <div id="nt_content">
                 <button id="nt_generateNumber" type="button" class="nt_button">Sag eine Zahl</button>
-                <button id="nt_repeatNumber" type="button" class="nt_button">Nochmal abspielen</button>
+                <button id="nt_repeatNumber" type="button" class="nt_button">Nochmal hören</button>
                 <button id="nt_revealSolution" type="button" class="nt_button nt_hidden">Lösung zeigen</button>
                 <div id="nt_numbersArea"></div>
             </div>

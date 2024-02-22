@@ -3,14 +3,44 @@
 }
 
 #nt_wrapper {
+    max-width: 800px;
     font-family: 'Roboto', sans-serif;
     font-size: 1.3em;
     text-align: center;
     padding: 20px;
-    margin: 20px;
-    border: 1px solid #333;
+    margin-top: 80px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 20px;
+    border: 3px solid #ff0fbb;
     border-radius: 10px;
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+
+#nt_header h2 {
+    margin-top: 20px;
+    margin-bottom: 40px;
+    display: block;
+}
+
+#nt_header span {
+    font-family: 'Pacifico', 'Lobster', 'Roboto', sans-serif;
+    /* background-color: #333;
+    border: 3px solid #333;
+    border-radius: 100px; */
+    color: #333;
+    border-bottom: 3px solid #ff0fbb;
+    font-size: 50px;
+    /* text-decoration: underline; */
+    text-transform: uppercase;
+    padding: 5px 0px 5px 0px;
+}
+
+#nt_header img {
+    max-width: 400px;
+    border: 3px solid #ff0fbb;
+    border-radius: 20px;
+    margin-top: -83px;
 }
 
 .nt_button {
@@ -28,6 +58,16 @@
 .nt_button:hover {
     transform: scale(1.1);
     box-shadow: rgba(0, 0, 0, 0.4) 0px 3px 8px;
+}
+
+.nt_button:disabled {
+    background-color: #ccc;
+    color: #666;
+    cursor: not-allowed;
+}
+
+.nt_button:disabled:hover {
+    background-color: #bbb;
 }
 
 #nt_generateNumber,
@@ -79,7 +119,7 @@
 
 #nt_slider-container {
     background-color: #eee;
-    width: 200px;
+    width: 250px;
     padding-bottom: 10px;
     padding-top: 10px;
     margin-top: 20px;
@@ -88,10 +128,13 @@
 
 #nt_slider-container p {
     margin-bottom: 2px;
+    margin-top: 2px;
+    font-size: 1.2em;
 }
 
 #nt_numbersArea {
-    margin-top: 20px;;
+    margin-top: 20px;
+    ;
 }
 
 #nt_content {
@@ -119,15 +162,31 @@
 }
 
 
-@media (max-width: 600px) {
+@media (max-width: 494px) {
     .nt_number {
         width: 50px;
         height: 50px;
-        line-height: 50px;
+        line-height: 40px;
         font-size: 20px;
     }
 
-    .nt_button {
-        font-size: 14px;
+    #nt_header img {
+        max-width: 250px;
+        border-radius: 10px;
+    }
+
+    #nt_header span {
+        font-size: 30px;
+    }
+}
+
+@media (max-width: 323px) {
+
+    #nt_header img {
+        max-width: 200px;
+    }
+
+    #nt_header span {
+        border-bottom: none;
     }
 }

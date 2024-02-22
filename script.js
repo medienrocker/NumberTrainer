@@ -21,22 +21,38 @@ document.addEventListener('DOMContentLoaded', function () {
     // Function to initialize audio elements
     function initializeAudio() {
         for (let i = 0; i <= 20; i++) {
-            let audio = new Audio('audio/number' + (i < 10 ? '0' + i : i) + '.mp3');
+            let audio = new Audio('https://www.medienrocker.com/games/numbertrainer/audio/number' + (i < 10 ? '0' + i : i) + '.mp3');
             audioElements[i] = audio;
         }
         correctAnswerAudio.forEach((file, index) => {
-            audioElements['correct' + index] = new Audio('audio/' + file);
+            audioElements['correct' + index] = new Audio('https://www.medienrocker.com/games/numbertrainer/audio/' + file);
         });
         wrongAnswerAudio.forEach((file, index) => {
-            audioElements['wrong' + index] = new Audio('audio/' + file);
+            audioElements['wrong' + index] = new Audio('https://www.medienrocker.com/games/numbertrainer/audio/' + file);
         });
     }
 
-    useSliderCheckbox.addEventListener('change', setRangeFromSlider);
     rangeSlider.addEventListener('input', function (e) {
         document.getElementById('nt_sliderValue').innerText = e.target.value;
         setRangeFromSlider();
     });
+
+    useSliderCheckbox.addEventListener('change', function () {
+        const sliderControls = document.getElementById('nt_sliderControls');
+        sliderControls.style.display = useSliderCheckbox.checked ? 'block' : 'none';
+        setRangeFromSlider();
+        toggleRangeButtonsDisabled(useSliderCheckbox.checked);
+    });
+
+    function toggleRangeButtonsDisabled(isDisabled) {
+        ['nt_range06', 'nt_range712', 'nt_range1320'].forEach(id => {
+            document.getElementById(id).disabled = isDisabled;
+        });
+    }
+
+    // Initialize the state on page load
+    toggleRangeButtonsDisabled(useSliderCheckbox.checked);
+
 
     function setRange(range) {
         currentRange = range;
@@ -47,11 +63,11 @@ document.addEventListener('DOMContentLoaded', function () {
         ['nt_range06', 'nt_range712', 'nt_range1320'].forEach(id => {
             document.getElementById(id).classList.remove('nt_active');
         });
-        if (range[1] === 6) {
+        if (range[1] >= 0 && range[1] <= 6) {
             document.getElementById('nt_range06').classList.add('nt_active');
-        } else if (range[1] === 12) {
+        } else if (range[1] >= 7 && range[1] <= 12) {
             document.getElementById('nt_range712').classList.add('nt_active');
-        } else if (range[1] === 20) {
+        } else if (range[1] >= 13 && range[1] <= 20) {
             document.getElementById('nt_range1320').classList.add('nt_active');
         }
 
