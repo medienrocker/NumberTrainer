@@ -155,12 +155,96 @@
 }
 
 .nt_active {
-    /* Example style for active state */
     background-color: #4CAF50;
     color: white;
     border-radius: 5px;
 }
 
+/* ----- Stats styling ----- */
+#nt_stats {
+    font-size: .6em;
+    border: 3px solid #ff0fbb;
+    border-bottom: 0;
+    border-radius: 10px 10px 0 0;
+    padding: 0px 0px 10px 0px;
+    max-width: 300px;
+    margin: 0px auto -22px auto;
+}
+
+#nt_accuracyDisplay {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#nt_accuracyDisplay p {
+    margin-bottom: 0px;
+    color: #666;
+    font-size: .9em;
+}
+
+#nt_correctClicks,
+#nt_totalClicks,
+#nt_accuracy {
+    font-weight: 600;
+    color: #007bff;
+}
+
+#nt_bestResultDisplay span {
+    font-weight: 600;
+    color: #28a745;
+}
+
+#nt_bestResultDisplay h3 {
+    font-weight: 500;
+    margin: -15px 0 5px 0;
+}
+
+#nt_bestResultDisplay p {
+    margin: 0 0 0 0;
+}
+
+/* ----- Codeblock styling ----- */
+.nt_code-container {
+    font-family: monospace, sans-serif;
+    margin: 60px auto 20px auto;
+    max-width: 600px;
+}
+
+.nt_embed-hint {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+    margin: 10px;
+    text-align: center;
+}
+
+.nt_code-header {
+    background-color: #333;
+    color: #fff;
+    padding: 10px;
+    font-size: 12px;
+    display: flex;
+    justify-content: space-between;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+
+.nt_code-area {
+    background-color: #000;
+    color: #fff;
+    padding: 10px;
+    margin-top: 0px;
+    border: none;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    max-width: 600px;
+    height: 50px;
+    overflow: auto;
+}
+
+.nt_copy-button {
+    cursor: pointer;
+}
 
 @media (max-width: 494px) {
     .nt_number {

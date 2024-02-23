@@ -46,25 +46,36 @@
             <!-- These will be dynamically created in JavaScript -->
         </div>
 
-        <div id="nt_accuracyDisplay" >
-            <p>Alle Clicks: <span id="nt_totalClicks">0</span></p>
-            <p>Richtige Clicks: <span id="nt_correctClicks">0</span></p>
-            <p>Genauigkeit: <span id="nt_accuracy">0%</span></p>
-            <!-- Hidden input fields for potential database storage -->
-            <input type="hidden" id="nt_totalClicksInput">
-            <input type="hidden" id="nt_correctClicksInput">
-            <input type="hidden" id="nt_accuracyInput">
-        </div>
-
-        <div id="nt_bestResultDisplay" style="margin-top: 20px;">
-            <h3>Bestes Ergebnis</h3>
-            <p><span id="nt_bestCorrectClicks">0</span> / <span id="nt_bestTotalClicks">0</span> = <span id="nt_bestAccuracy">0%</span></p>
+        <div id="nt_stats">
+            <div id="nt_accuracyDisplay" >
+                <p>Richtige Clicks: <span id="nt_correctClicks">0</span> /</p>
+                <p>&nbsp;Alle Clicks: <span id="nt_totalClicks">0</span> =</p>
+                <p>&nbsp;Genauigkeit: <span id="nt_accuracy">0%</span></p>
+                <!-- Hidden input fields for potential database storage -->
+                <input type="hidden" id="nt_totalClicksInput">
+                <input type="hidden" id="nt_correctClicksInput">
+                <input type="hidden" id="nt_accuracyInput">
+            </div>
+            <div id="nt_bestResultDisplay" style="margin-top: 20px;">
+                <h3>🏆Bestes Ergebnis🏆</h3>
+                <p><span id="nt_bestCorrectClicks">0</span> / <span id="nt_bestTotalClicks">0</span> = <span id="nt_bestAccuracy">0%</span></p>
+            </div>
         </div>
 
 
 
     </div>
+    <div class="nt_code-container">
+        <p class="nt_embed-hint">&Rarr; Dieses Mini-Game auf deiner eigenen Seite einbetten &Larr;</p>
+        <div class="nt_code-header">
+            <span>HTML</span>
+            <span class="nt_copy-button" onclick="copyToClipboard()">&#128203; Copy code</span>
+        </div>
+        <pre class="nt_code-area" id="nt_codeBlock">&lt;iframe src="https://www.medienrocker.com/games/numbertrainer/" width="800" height="640"&gt;&lt;/iframe&gt;</pre>
+    </div>
+    
     <script src="script.js"></script>
+    <script src="codeblock.js"></script>
 </body>
 
 </html>
