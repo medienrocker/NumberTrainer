@@ -15,6 +15,10 @@ document.addEventListener('DOMContentLoaded', function () {
     let bestAccuracy = 0;
     let bestTotalClicks = 0;
     let bestCorrectClicks = 0;
+    let startTime = null;
+    let endTime = null;
+    let attempts = 0;
+    let isGameActive = false; // control flag to stop counting if right number is clicked
 
     // Initialize slider and displayed range
     document.getElementById('nt_rangeSlider').value = currentRange[1];
@@ -97,6 +101,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
     function playRandomNumber() {
+        isGameActive = true;
+        startTime = new Date(); // Start the timer
+        attempts = 0; // Reset attempts
         totalClicks = 0; // Reset counters when a new number is generated
         correctClicks = 0;
         showClickRatio();
@@ -133,20 +140,31 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Function to check if the selected number is correct
     function checkNumber(num) {
-        totalClicks++; // Increment total clicks for every number button click
+        if (!isGameActive) return; // Ignore clicks if the game is not active
+
+        totalClicks++;
+        attempts++;
 
         let selectedButton = event.target;
         if (num === currentNumber) {
-            correctClicks++; // Increment correct clicks if the correct number is clicked
+            correctClicks++;
+            isGameActive = false; // Stop further click counting
+            endTime = new Date(); // End the timer
+
+            let duration = (endTime - startTime) / 1000; // Calculate duration in seconds
+            console.log(`Game duration: ${duration} seconds`);
+            console.log(`Number of attempts: ${attempts}`);
+
             selectedButton.className = 'nt_number nt_correct';
             playRandomCorrectAudio();
-            showClickRatio(); // Call function to show the click ratio
+            showClickRatio();
         } else {
             selectedButton.className = 'nt_number nt_incorrect';
             playRandomWrongAudio();
             showClickRatio();
         }
     }
+
 
     function showClickRatio() {
         let ratio = correctClicks / totalClicks;
