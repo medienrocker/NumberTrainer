@@ -7,27 +7,15 @@ document.addEventListener('DOMContentLoaded', function () {
     const rangeSlider = document.getElementById('nt_rangeSlider');
     let currentNumber = 0;
     let audioElements = {};
-    let wrongAnswerAudio = ['wrong1.mp3', 'wrong2.mp3', 'wrong3.mp3']; // Array of wrong answer audio clips
-    let correctAnswerAudio = ['correct1.mp3', 'correct2.mp3', 'correct3.mp3', 'correct4.mp3']; // Array of correct answer audio clips
-    let currentRange = [0, 6]; // Default range to 0-6
-    let totalClicks = 0;
-    let correctClicks = 0;
-    let bestAccuracy = 0;
-    let bestTotalClicks = 0;
-    let bestCorrectClicks = 0;
-    let startTime = null;
-    let endTime = null;
-    let attempts = 0;
-    let isGameActive = false; // control flag to stop counting if right number is clicked
+    let wrongAnswerAudio = ['wrong1.mp3', 'wrong2.mp3', 'wrong3.mp3'];
+    let correctAnswerAudio = ['correct1.mp3', 'correct2.mp3', 'correct3.mp3', 'correct4.mp3'];
+    let currentRange = [0, 6];
+    let currentSession = null;
+    let isGameActive = false;
+    let gameSessions = [];
+    let bestTime = null;
 
-    // Initialize slider and displayed range
-    document.getElementById('nt_rangeSlider').value = currentRange[1];
-    document.getElementById('nt_sliderValue').innerText = currentRange[1];
 
-    // Set initial active state for range button
-    document.getElementById('nt_range06').classList.add('nt_active');
-
-    // Function to initialize audio elements
     function initializeAudio() {
         for (let i = 0; i <= 20; i++) {
             let audio = new Audio('https://www.medienrocker.com/games/numbertrainer/audio/number' + (i < 10 ? '0' + i : i) + '.mp3');
@@ -41,52 +29,45 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    rangeSlider.addEventListener('input', function (e) {
-        document.getElementById('nt_sliderValue').innerText = e.target.value;
-        setRangeFromSlider();
-    });
-
-    useSliderCheckbox.addEventListener('change', function () {
-        const sliderControls = document.getElementById('nt_sliderControls');
-        sliderControls.style.display = useSliderCheckbox.checked ? 'block' : 'none';
-        setRangeFromSlider();
-        toggleRangeButtonsDisabled(useSliderCheckbox.checked);
-    });
-
-    function toggleRangeButtonsDisabled(isDisabled) {
-        ['nt_range06', 'nt_range712', 'nt_range1320'].forEach(id => {
-            document.getElementById(id).disabled = isDisabled;
+    function startNewGameSession() {
+        currentSession = {
+        startTime: new Date(),
+        endTime: null,
+        totalClicks: 0,
+        correctClicks: 0,
+        numberAttempts: {},
+        currentRange: currentRange.slice(),
+        currentCorrectNumber: null, // The correct number for this session
+        attempts: 0,
+        sessionStatus: 'incomplete' // Default status
+        };
+        currentRange.forEach(number => {
+            currentSession.numberAttempts[number] = 0;
         });
+
+        gameSessions.push(currentSession);
+        isGameActive = true;
     }
 
-    // Initialize the state on page load
-    toggleRangeButtonsDisabled(useSliderCheckbox.checked);
+    function endGameSession(correctlyCompleted) {
+        currentSession.endTime = new Date();
+        currentSession.sessionStatus = correctlyCompleted ? 'completed' : 'quit';
+        currentSession = null; // Clear the current session
+    }
 
+    // Set initial active state for the first range button
+    document.getElementById('nt_range06').classList.add('nt_active');
 
     function setRange(range) {
         currentRange = range;
-        document.getElementById('nt_sliderValue').innerText = range[1]; // Update slider value display
-        document.getElementById('nt_rangeSlider').value = range[1]; // Update slider to match the range
+        document.getElementById('nt_sliderValue').innerText = range[1];
+        document.getElementById('nt_rangeSlider').value = range[1];
 
-        // Update active button state
         ['nt_range06', 'nt_range712', 'nt_range1320'].forEach(id => {
             document.getElementById(id).classList.remove('nt_active');
         });
-        if (range[1] >= 0 && range[1] <= 6) {
-            document.getElementById('nt_range06').classList.add('nt_active');
-        } else if (range[1] >= 7 && range[1] <= 12) {
-            document.getElementById('nt_range712').classList.add('nt_active');
-        } else if (range[1] >= 13 && range[1] <= 20) {
-            document.getElementById('nt_range1320').classList.add('nt_active');
-        }
-
-        // Disable range buttons if using slider
-        const buttonsDisabled = useSliderCheckbox.checked;
-        document.getElementById('nt_range06').disabled = buttonsDisabled;
-        document.getElementById('nt_range712').disabled = buttonsDisabled;
-        document.getElementById('nt_range1320').disabled = buttonsDisabled;
+        document.getElementById(`nt_range${range[0]}${range[1]}`).classList.add('nt_active');
     }
-
 
     function setRangeFromSlider() {
         if (useSliderCheckbox.checked) {
@@ -94,29 +75,17 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    // Event listeners for range buttons
-    document.getElementById('nt_range06').addEventListener('click', () => setRange([0, 6]));
-    document.getElementById('nt_range712').addEventListener('click', () => setRange([7, 12]));
-    document.getElementById('nt_range1320').addEventListener('click', () => setRange([13, 20]));
-
-
     function playRandomNumber() {
-        isGameActive = true;
-        startTime = new Date(); // Start the timer
-        attempts = 0; // Reset attempts
-        totalClicks = 0; // Reset counters when a new number is generated
-        correctClicks = 0;
-        showClickRatio();
-
+        startNewGameSession();
         let min = currentRange[0];
         let max = currentRange[1];
         currentNumber = Math.floor(Math.random() * (max - min + 1)) + min;
+        currentSession.currentCorrectNumber = currentNumber;
         audioElements[currentNumber]?.play();
         generateNumbers();
         document.getElementById('nt_revealSolution').classList.remove('nt_hidden');
     }
 
-    // Function to generate number buttons
     function generateNumbers() {
         numbersArea.innerHTML = '';
         for (let i = currentRange[0]; i <= currentRange[1]; i++) {
@@ -129,84 +98,57 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    // Function to shuffle array (Fisher-Yates Shuffle)
-    function shuffleArray(array) {
-        for (let i = array.length - 1; i > 0; i--) {
-            let j = Math.floor(Math.random() * (i + 1));
-            [array[i], array[j]] = [array[j], array[i]];
-        }
-        return array;
-    }
-
-    // Function to check if the selected number is correct
     function checkNumber(num) {
-        if (!isGameActive) return; // Ignore clicks if the game is not active
+        if (!isGameActive) return;
 
-        totalClicks++;
-        attempts++;
+        currentSession.totalClicks++;
+        currentSession.attempts++;
+
+        if (num !== currentNumber) {
+            currentSession.numberAttempts[num] = (currentSession.numberAttempts[num] || 0) + 1;
+        }
 
         let selectedButton = event.target;
         if (num === currentNumber) {
-            correctClicks++;
-            isGameActive = false; // Stop further click counting
-            endTime = new Date(); // End the timer
-
-            let duration = (endTime - startTime) / 1000; // Calculate duration in seconds
-            console.log(`Game duration: ${duration} seconds`);
-            console.log(`Number of attempts: ${attempts}`);
+            currentSession.correctClicks++;
+            isGameActive = false;
+            currentSession.endTime = new Date();
 
             selectedButton.className = 'nt_number nt_correct';
             playRandomCorrectAudio();
             showClickRatio();
+            updateBestTime(currentSession);
+
         } else {
             selectedButton.className = 'nt_number nt_incorrect';
             playRandomWrongAudio();
             showClickRatio();
         }
-    }
 
+        // Update game data in the textarea
+        updateGameDataInTextarea();
+    }
 
     function showClickRatio() {
-        let ratio = correctClicks / totalClicks;
+        let currentSession = gameSessions[gameSessions.length - 1];
+        let ratio = currentSession.correctClicks / currentSession.totalClicks;
         let accuracyPercentage = ratio > 0 ? (ratio * 100).toFixed(2) : 0;
 
-        // Update the HTML elements with the accuracy data
-        document.getElementById('nt_totalClicks').textContent = totalClicks;
-        document.getElementById('nt_correctClicks').textContent = correctClicks;
+        document.getElementById('nt_correctClicks').textContent = currentSession.correctClicks;
+        document.getElementById('nt_totalClicks').textContent = currentSession.totalClicks;
         document.getElementById('nt_accuracy').textContent = accuracyPercentage + '%';
-
-        // Update the hidden input fields for potential database storage
-        document.getElementById('nt_totalClicksInput').value = totalClicks;
-        document.getElementById('nt_correctClicksInput').value = correctClicks;
-        document.getElementById('nt_accuracyInput').value = accuracyPercentage;
-
-        // Check if current accuracy is better than the best accuracy
-        if (ratio > bestAccuracy) {
-            bestAccuracy = ratio;
-            bestTotalClicks = totalClicks;
-            bestCorrectClicks = correctClicks;
-
-            // Update the best result display
-            document.getElementById('nt_bestAccuracy').textContent = accuracyPercentage + '%';
-            document.getElementById('nt_bestTotalClicks').textContent = bestTotalClicks;
-            document.getElementById('nt_bestCorrectClicks').textContent = bestCorrectClicks;
-        }
     }
 
-
-    // Function to play a random audio clip for a wrong answer
     function playRandomWrongAudio() {
         let randomIndex = Math.floor(Math.random() * wrongAnswerAudio.length);
         audioElements['wrong' + randomIndex].play();
     }
 
-    // Function to play a random audio clip for a correct answer
     function playRandomCorrectAudio() {
         let randomIndex = Math.floor(Math.random() * correctAnswerAudio.length);
         audioElements['correct' + randomIndex].play();
     }
 
-    // Function to reveal the solution
     function revealSolution() {
         let allButtons = numbersArea.getElementsByClassName('nt_number');
         Array.from(allButtons).forEach(button => {
@@ -216,12 +158,99 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // Event listeners for buttons
+    // Get the range buttons and the Slider value
+    document.getElementById('nt_range06').addEventListener('click', () => setRange([0, 6]));
+    document.getElementById('nt_range712').addEventListener('click', () => setRange([7, 12]));
+    document.getElementById('nt_range1320').addEventListener('click', () => setRange([13, 20]));
+
+    rangeSlider.addEventListener('input', function (e) {
+        document.getElementById('nt_sliderValue').innerText = e.target.value;
+        setRangeFromSlider();
+    });
+
+    // Slider checkbox (soll ein eigener Wert gewählt werden?)
+    useSliderCheckbox.addEventListener('change', function () {
+        const sliderControls = document.getElementById('nt_sliderControls');
+        sliderControls.style.display = useSliderCheckbox.checked ? 'block' : 'none';
+        setRangeFromSlider();
+        ['nt_range06', 'nt_range712', 'nt_range1320'].forEach(id => {
+            document.getElementById(id).disabled = useSliderCheckbox.checked;
+        });
+    });
+
     generateButton.addEventListener('click', playRandomNumber);
     repeatButton.addEventListener('click', function () {
         audioElements[currentNumber].play();
     });
     revealButton.addEventListener('click', revealSolution);
+
+    function updateBestTime(currentSession) {
+        let sessionDuration = currentSession.endTime - currentSession.startTime; // Duration in milliseconds
+        if (bestTime === null || sessionDuration < bestTime) {
+            bestTime = sessionDuration;
+            displayBestTime();
+        }
+    }
+
+    function displayBestTime() {
+        let seconds = Math.floor(bestTime / 1000);
+        let milliseconds = bestTime % 1000;
+        document.getElementById('nt_bestTime').textContent = `${seconds}.${pad(milliseconds, 3)}`;
+    }
+
+    function pad(number, length) {
+        let str = '' + number;
+        while (str.length < length) {
+            str = '0' + str;
+        }
+        return str;
+    }
+
+    // ----- SAVE and LOAD the gameSession data ----- //
+    function getGameDataTextarea() {
+        let textarea = document.querySelector('#nt_allData textarea');
+        if (textarea) {
+            //console.log("Textarea selected: ", textarea);
+        } else {
+            console.log("Textarea not found.");
+        }
+        return textarea;
+    }
+
+
+    function updateGameDataInTextarea() {
+        let gameDataTextarea = getGameDataTextarea();
+        if (gameDataTextarea) {
+            gameDataTextarea.value = JSON.stringify(gameSessions);
+
+            // Print current session data to the console for testing
+            //console.log("Game Session Data:", JSON.stringify(gameSessions));
+        } else {
+            console.log("Textarea not found.");
+        }
+    }
+
+
+    // ----- SPARE function for use in the future ----- //
+
+    // Function to shuffle array (Fisher-Yates Shuffle)
+    function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            let j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
+
+
+    // Function to reset all counters (if needed in future)
+    function resetGame() {
+        isGameActive = true;
+        totalClicks = 0;
+        correctClicks = 0;
+        attempts = 0;
+        // Reset other game-related variables and UI elements as needed
+    }
 
     initializeAudio();
 });

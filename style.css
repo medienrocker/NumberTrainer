@@ -84,10 +84,12 @@
 
 #nt_repeatNumber {
     background-color: #007bff;
+    font-size: .8em;
 }
 
 #nt_revealSolution {
     background-color: #fd7e14;
+    font-size: .8em;
 }
 
 .nt_number {
@@ -179,13 +181,15 @@
 
 #nt_accuracyDisplay p {
     margin-bottom: 0px;
+    margin-top: 5px;
     color: #666;
     font-size: .9em;
 }
 
 #nt_correctClicks,
 #nt_totalClicks,
-#nt_accuracy {
+#nt_accuracy,
+#nt_bestTime {
     font-weight: 600;
     color: #007bff;
 }
@@ -197,11 +201,15 @@
 
 #nt_bestResultDisplay h3 {
     font-weight: 500;
-    margin: -15px 0 5px 0;
+    margin: 0 0 5px 0;
 }
 
 #nt_bestResultDisplay p {
     margin: 0 0 0 0;
+}
+
+.nt_small {
+    font-size: 0.7em;
 }
 
 /* ----- Codeblock styling ----- */

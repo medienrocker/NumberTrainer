@@ -9,6 +9,7 @@
 </head>
 
 <body>
+    <div id="nt_task" class="nt_hidden">[[Aufgabe]]</div>
     <div id="nt_wrapper">
         <div id="nt_header">
             <img src="https://www.medienrocker.com/games/numbertrainer/img/NumberTrainerBanner_edit3.png" alt="">
@@ -25,7 +26,7 @@
 
             <div id="nt_slider-container">
                 <label for="nt_useSlider">
-                    <input type="checkbox" id="nt_useSlider"> Zahlen wählen
+                    <input type="checkbox" id="nt_useSlider"> 0 - 20 (wählen)
                 </label>
                 <div id="nt_sliderControls" style="display: none;">
                     <input type="range" id="nt_rangeSlider" min="0" max="20" value="6">
@@ -52,13 +53,16 @@
                 <p>&nbsp;Alle Clicks: <span id="nt_totalClicks">0</span> =</p>
                 <p>&nbsp;Genauigkeit: <span id="nt_accuracy">0%</span></p>
                 <!-- Hidden input fields for potential database storage -->
-                <input type="hidden" id="nt_totalClicksInput">
+                <!-- <input type="hidden" id="nt_totalClicksInput">
                 <input type="hidden" id="nt_correctClicksInput">
-                <input type="hidden" id="nt_accuracyInput">
+                <input type="hidden" id="nt_accuracyInput"> -->
             </div>
-            <div id="nt_bestResultDisplay" style="margin-top: 20px;">
-                <h3>🏆Bestes Ergebnis🏆</h3>
-                <p><span id="nt_bestCorrectClicks">0</span> / <span id="nt_bestTotalClicks">0</span> = <span id="nt_bestAccuracy">0%</span></p>
+            <div id="nt_bestResultDisplay">
+                <h3>🏆Schnellste Zeit🏆</h3>
+                <p title="Schnellste Zeit in Sekunden und Millisekunden">
+                    [ <span id="nt_bestTime">00.000</span> <span class=""> s</span> ]
+                    <!-- <span id="nt_bestCorrectClicks">0</span> / <span id="nt_bestTotalClicks">0</span> = <span id="nt_bestAccuracy">0%</span> -->
+                </p>
             </div>
         </div>
 
@@ -73,6 +77,8 @@
         </div>
         <pre class="nt_code-area" id="nt_codeBlock">&lt;iframe src="https://www.medienrocker.com/games/numbertrainer/" width="800" height="640"&gt;&lt;/iframe&gt;</pre>
     </div>
+
+    <div id="nt_allData" class="nt_hidden">[[Alle Daten]]</div>
     
     <script src="script.js"></script>
     <script src="codeblock.js"></script>
