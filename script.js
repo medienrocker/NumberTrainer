@@ -93,12 +93,14 @@ document.addEventListener('DOMContentLoaded', function () {
             numberButton.textContent = i.toString();
             numberButton.className = 'nt_number';
             numberButton.type = 'button';
-            numberButton.onclick = function () { checkNumber(i); };
+            numberButton.addEventListener('click', function (evt) {
+                checkNumber(i, evt); // Pass the event object to the handler
+            });
             numbersArea.appendChild(numberButton);
         }
     }
 
-    function checkNumber(num) {
+    function checkNumber(num, evt) {
         if (!isGameActive) return;
 
         currentSession.totalClicks++;
@@ -108,16 +110,17 @@ document.addEventListener('DOMContentLoaded', function () {
             currentSession.numberAttempts[num] = (currentSession.numberAttempts[num] || 0) + 1;
         }
 
-        let selectedButton = event.target;
+        let selectedButton = evt.target; // 'evt' is the event object passed to the function
         if (num === currentNumber) {
             currentSession.correctClicks++;
             isGameActive = false;
             currentSession.endTime = new Date();
-
+            
             selectedButton.className = 'nt_number nt_correct';
             playRandomCorrectAudio();
             showClickRatio();
             updateBestTime(currentSession);
+            endGameSession(true);  // End the session as completed
 
         } else {
             selectedButton.className = 'nt_number nt_incorrect';

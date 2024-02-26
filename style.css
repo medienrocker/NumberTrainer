@@ -73,9 +73,23 @@
 #nt_generateNumber,
 #nt_repeatNumber,
 #nt_revealSolution {
+    /* display: flex;
+    align-items: center; */
     color: white;
     font-size: 1.3em;
     margin: 10px;
+}
+
+#nt_generateNumber svg,
+#nt_repeatNumber svg,
+#nt_revealSolution svg {
+    margin-right: 10px;
+}
+
+#nt_repeatNumber,
+#nt_revealSolution {
+    font-size: .8em;
+    padding: 5px 10px;
 }
 
 #nt_generateNumber {
@@ -84,12 +98,10 @@
 
 #nt_repeatNumber {
     background-color: #007bff;
-    font-size: .8em;
 }
 
 #nt_revealSolution {
     background-color: #fd7e14;
-    font-size: .8em;
 }
 
 .nt_number {
@@ -136,7 +148,6 @@
 
 #nt_numbersArea {
     margin-top: 20px;
-    ;
 }
 
 #nt_content {
@@ -252,6 +263,23 @@
 
 .nt_copy-button {
     cursor: pointer;
+}
+
+/* ---- Formate für den "edit" und "löschen" link / button ---- */
+.nt_functions {
+    text-align: center;
+    width: 100%;
+    margin-top: 20px;
+}
+
+.nt_functions i {
+    font-size: 2em;
+    transition: 0.2s ease-in-out;
+}
+
+.nt_functions i:hover {
+    color: green;
+    transform: scale(1.2);
 }
 
 @media (max-width: 494px) {
